@@ -14,9 +14,6 @@ At the moment it contains:
  * Google Sponsored Links Search module xgoogle/sponsoredlinks.py
    http://www.catonmat.net/blog/python-library-for-google-sponsored-links-search/
 
- * Google Sets module xgoogle/googlesets.py
-   http://www.catonmat.net/blog/python-library-for-google-sets/
-
  * Google Translate module xgoogle/translate.py
    http://www.catonmat.net/blog/python-library-for-google-translate/
 
@@ -76,52 +73,6 @@ The SponsoredLinks object has several public methods and properties:
 
 A SponsoredLink object has four attributes -- "title", "desc", "url", and "display_url".
 They are Unicode strings, don't forget to use a proper encoding before outputting them.
-
---------------------------------------------------------------------------
-
-Here is an example usage of Google Sets module:
-
-    >>> from xgoogle.googlesets import GoogleSets
-    >>> gs = GoogleSets(['red', 'yellow'])
-    >>> results = gs.get_results()
-    >>> print len(results)
-    >>> for r in results:
-    ...   print r.encode('utf8')
-    ... 
-
-    output:
-
-    red
-    yellow
-    blue
-    white
-    ...
-
-The GoogleSets object has only get_results(set_type) public method. The default value
-for set_type is SMALL_SET, which makes it return 15 related items or fewer.
-Use LARGE_SET to get more than 15 items. This get_results() method returns a list of
-related items that are represented as unicode strings.
-Don't forget to do the proper encoding when outputting these strings!
-
-Here is an example showing differences between SMALL_SET and LARGE_SET:
-
-    >>> from xgoogle.googlesets import GoogleSets, LARGE_SET, SMALL_SET
-    >>> gs = GoogleSets(['python', 'perl'])
-    >>> results_small = gs.get_results() # SMALL_SET by default
-    >>> len(results_small)
-    11
-    >>> results_small
-    [u'python', u'perl', u'php', u'ruby', u'java', u'javascript', u'c++', u'c',
-     u'cgi', u'tcl', u'c#']
-    >>>
-    >>> results_large = gs.get_results(LARGE_SET)
-    >>> len(results_large)
-    46
-    >>> results_large
-    [u'perl', u'python', u'java', u'c++', u'php', u'c', u'c#', u'javascript',
-     u'howto', u'wiki', u'raid', u'dd', u'linux', u'ruby', u'language', u'xml',
-     u'sgml', u'svn', u'kernel', ...]
-
 
 --------------------------------------------------------------------------
 
