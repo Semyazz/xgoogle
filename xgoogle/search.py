@@ -175,6 +175,7 @@ class GoogleSearch(object):
             raise cls(*arg)
 
     def _get_results_page(self):
+        """Construct search url, and get the page content"""
         if self._page == 0:
             if self._results_per_page == 10:
                 url = GoogleSearch.SEARCH_URL_0
@@ -226,6 +227,7 @@ class GoogleSearch(object):
         return {'from': int(matches.group(1)), 'to': int(matches.group(2)), 'total': int(matches.group(3))}
 
     def _extract_results(self, soup):
+        """Extract results from the page"""
         results = soup.findAll('li', {'class': 'g'})
         ret_res = []
         for result in results:
@@ -235,6 +237,7 @@ class GoogleSearch(object):
         return ret_res
 
     def _extract_result(self, result):
+        """Extract title,url,desc for a result"""
         title, url = self._extract_title_url(result)
         desc = self._extract_description(result)
         if not title or not url or not desc:
@@ -243,7 +246,7 @@ class GoogleSearch(object):
 
     def _extract_title_url(self, result):
         #title_a = result.find('a', {'class': re.compile(r'\bl\b')})
-        title_a = result.find('a')
+        title_a = result.find('h3').find('a')
         if not title_a:
             self._maybe_raise(ParseError, "Title tag in Google search result was not found", result)
             return None, None
@@ -256,6 +259,10 @@ class GoogleSearch(object):
         return title, url
 
     def _extract_description(self, result):
+        """Seems this is enough"""
+        desc = result.find('div', {'class': 's'}).find('span', {'class': 'st'})
+        return desc
+
         desc_div = result.find('div', {'class': re.compile(r'\bs\b')})
         if not desc_div:
             self._maybe_raise(ParseError, "Description tag in Google search result was not found", result)
@@ -299,81 +306,4 @@ class GoogleSearch(object):
         s =    re.sub(r'&#(\d+);',  ascii_replacer, str, re.U)
         return re.sub(r'&([^;]+);', entity_replacer, s, re.U)
 
-class BlogSearch(GoogleSearch):
 
-    def _extract_info(self, soup):
-        empty_info = {'from': 0, 'to': 0, 'total': 0}
-        td_rsb = soup.find('td', 'rsb')
-        if not td_rsb:
-            self._maybe_raise(ParseError, "Td with number of results was not found on Blogs search page", soup)
-            return empty_info
-        font = td_rsb.find('font')
-        if not font:
-            self._maybe_raise(ParseError, """<p> tag within <tr class='rsb'> was not found on Blogs search page""", soup)
-            return empty_info
-        txt = ''.join(font.findAll(text=True))
-        txt = txt.replace(',', '')
-        if self.hl == 'es':
-            matches = re.search(r'Resultados (\d+) - (\d+) de (?:aproximadamente )?(\d+)', txt, re.U)
-        elif self.hl == 'en':
-            matches = re.search(r'Results (\d+) - (\d+) of (?:about )?(\d+)', txt, re.U)
-        if not matches:
-            return empty_info
-        return {'from': int(matches.group(1)), 'to': int(matches.group(2)), 'total': int(matches.group(3))}
-
-    def _extract_results(self, soup):
-        results = soup.findAll('p', {'class': 'g'})
-        ret_res = []
-        for result in results:
-            eres = self._extract_result(result)
-            if eres:
-                ret_res.append(eres)
-        return ret_res
-
-    def _extract_result(self, result):
-        title, url = self._extract_title_url(result)
-        desc = self._extract_description(result)
-        if not title or not url or not desc:
-            return None
-        return SearchResult(title, url, desc)
-
-    def _extract_title_url(self, result):
-        #title_a = result.find('a', {'class': re.compile(r'\bl\b')})
-        title_a = result.findNext('a')
-        if not title_a:
-            self._maybe_raise(ParseError, "Title tag in Blog search result was not found", result)
-            return None, None
-        title = ''.join(title_a.findAll(text=True))
-        title = self._html_unescape(title)
-        url = title_a['href']
-        match = re.match(r'/url\?q=(http[^&]+)&', url)
-        if match:
-            url = urllib.unquote(match.group(1))
-        return title, url
-
-    def _extract_description(self, result):
-        desc_td = result.findNext('td')
-        if not desc_td:
-            self._maybe_raise(ParseError, "Description tag in Google search result was not found", result)
-            return None
-
-        desc_strs = []
-        def looper(tag):
-            if not tag: return
-            for t in tag:
-                try:
-                    if t.name == 'br': break
-                except AttributeError:
-                    pass
-
-                try:
-                    desc_strs.append(t.string)
-                except AttributeError:
-                    desc_strs.append(t)
-
-        looper(desc_td)
-        looper(desc_td.find('wbr')) # BeautifulSoup does not self-close <wbr>
-
-        desc = ''.join(s for s in desc_strs if s)
-        return self._html_unescape(desc)
-        
