@@ -11,9 +11,6 @@ At the moment it contains:
  * Google Search module xgoogle/search.py.
    http://www.catonmat.net/blog/python-library-for-google-search/
 
- * Google Sponsored Links Search module xgoogle/sponsoredlinks.py
-   http://www.catonmat.net/blog/python-library-for-google-sponsored-links-search/
-
  * Google Translate module xgoogle/translate.py
    http://www.catonmat.net/blog/python-library-for-google-translate/
 
@@ -45,34 +42,6 @@ The GoogleSearch object has several public methods and properties:
 
 A SearchResult object has three attributes -- "title", "desc", and "url".
 They are Unicode strings, so do a proper encoding before outputting them.
-
---------------------------------------------------------------------------
-
-Here is an example usage of Google Sponsored Links Search module:
-
-    >>> from xgoogle.sponsoredlinks import SponsoredLinks, SLError
-    >>> sl = SponsoredLinks("video software")
-    >>> sl.results_per_page = 100
-    >>> results = sl.get_results()
-    >>> for result in results:
-    ...   print result.title.encode('utf8')
-    ...
-
-    output:
-
-    Photoshop Video Software
-    Video Poker Software
-    DVD/Video Rental Software
-    ...
-
-The SponsoredLinks object has several public methods and properties:
-
-    method get_results() - gets a page of results, returning a list of SearchResult objects.
-    property num_results - returns number of search results found.
-    property results_per_page - sets/gets the number of results to get per page.
-
-A SponsoredLink object has four attributes -- "title", "desc", "url", and "display_url".
-They are Unicode strings, don't forget to use a proper encoding before outputting them.
 
 --------------------------------------------------------------------------
 
