@@ -1,13 +1,5 @@
 #!/usr/bin/python
-# encoding: utf-8
-#
-# Peteris Krumins (peter@catonmat.net)
-# http://www.catonmat.net  --  good coders code, great reuse
-#
-# http://www.catonmat.net/blog/python-library-for-google-search/
-#
-# Code is licensed under MIT license.
-#
+# -*- coding: utf8 -*- 
 
 import re
 import urllib
@@ -210,6 +202,10 @@ class GoogleSearch(object):
         return BeautifulSoup(page)
 
     def _extract_info(self, soup):
+        """Extract total results
+        
+        Page X of about XXX results
+        """
         empty_info = {'from': 0, 'to': 0, 'total': 0}
         div_ssb = soup.find('div', id='ssb')
         if not div_ssb:

@@ -1,20 +1,35 @@
-This is a Google library called 'xgoogle'. Current version is 1.3.
+Python wrapper to Google Search service.
 
-It's written by Peteris Krumins (peter@catonmat.net).
-His blog is at http://www.catonmat.net  --  good coders code, great reuse.
+rovide a wrapper for the following service:
+* Google Search
+* Google Translate
 
-The code is licensed under MIT license.
+Forked from [xgoogle](https://github.com/pkrumins/xgoogle) 
+by Peteris Krumins <peter@catonmat.net>
 
---------------------------------------------------------------------------
+Contributors:
+* Holger Berndt
+* Juanjo Conti
+* Steve Steiner
+* azappella
 
-At the moment it contains:
- * Google Search module xgoogle/search.py.
-   http://www.catonmat.net/blog/python-library-for-google-search/
+Disclaimer
+==========
 
- * Google Translate module xgoogle/translate.py
-   http://www.catonmat.net/blog/python-library-for-google-translate/
+It may voilate the Google [Terms of Service](https://www.google.com/intl/en/policies/terms/)
 
---------------------------------------------------------------------------
+> Don’t misuse our Services. 
+> For example, don’t interfere with our Services or 
+> try to access them using a method 
+> other than the interface and the instructions that we provide. 
+
+I just provide it for personal study and research.
+
+Usage
+=====
+
+Google Search
+-------------
 
 Here is an example usage of Google Search module:
 
@@ -43,7 +58,9 @@ The GoogleSearch object has several public methods and properties:
 A SearchResult object has three attributes -- "title", "desc", and "url".
 They are Unicode strings, so do a proper encoding before outputting them.
 
---------------------------------------------------------------------------
+
+Google Translate
+----------------
 
 Here is an example usage of Google Translate module:
 
@@ -96,24 +113,6 @@ Here is an example usage of LanguageDetector:
 The "DetectionError" may get raised if the detection failed.
 
 
---------------------------------------------------------------------------
-
-
-Version history:
-
-v1.0:  * initial release, xgoogle library contains just the Google Search.
-v1.1:  * added Google Sponsored Links Search.
-       * fixed a bug in browser.py that might have thrown an unexpected exception.
-v1.2:  * added Google Sets module
-v1.3:  * added Google Translate module
-       * fixed a bug in browser.py when KeyboardInterrupt did not get propagated.
-
---------------------------------------------------------------------------
-
-That's it. Have fun! :)
-
-
-Sincerely,
-Peteris Krumins
-http://www.catonmat.net
-
+License
+=======
+Licensed under MIT license.
